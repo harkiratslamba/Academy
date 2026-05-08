@@ -40,7 +40,7 @@
                             <td class="fw-semibold">{{ $class->class_name }}</td>
                             <td><span class="badge bg-info text-dark">{{ $class->sections_count }}</span></td>
                             <td>
-                                <form method="POST" action="{{ route('admin.classes.destroyClass', $class->id) }}"
+                                <form method="POST" action="{{ route('admin.classes.destroy', $class->id) }}"
                                       onsubmit="return confirm('Delete class {{ addslashes($class->class_name) }}?')">
                                     @csrf
                                     @method('DELETE')
@@ -83,7 +83,7 @@
                             <td>{{ $section->schoolClass->class_name ?? '—' }}</td>
                             <td class="fw-semibold">{{ $section->section_name }}</td>
                             <td>
-                                <form method="POST" action="{{ route('admin.classes.destroySection', $section->id) }}"
+                                <form method="POST" action="{{ route('admin.sections.destroy', $section->id) }}"
                                       onsubmit="return confirm('Delete section {{ addslashes($section->section_name) }}?')">
                                     @csrf
                                     @method('DELETE')
@@ -106,7 +106,7 @@
 {{-- ── Add Class Modal ─────────────────────────────────────────────── --}}
 <div class="modal fade" id="addClassModal" tabindex="-1">
     <div class="modal-dialog">
-        <form method="POST" action="{{ route('admin.classes.storeClass') }}" class="modal-content">
+        <form method="POST" action="{{ route('admin.classes.store') }}" class="modal-content">
             @csrf
             <div class="modal-header">
                 <h5 class="modal-title"><i class="fa fa-building me-2"></i>Add Class</h5>
@@ -128,7 +128,7 @@
 {{-- ── Add Section Modal ───────────────────────────────────────────── --}}
 <div class="modal fade" id="addSectionModal" tabindex="-1">
     <div class="modal-dialog">
-        <form method="POST" action="{{ route('admin.classes.storeSection') }}" class="modal-content">
+        <form method="POST" action="{{ route('admin.sections.store') }}" class="modal-content">
             @csrf
             <div class="modal-header">
                 <h5 class="modal-title"><i class="fa fa-list me-2"></i>Add Section</h5>

@@ -2,55 +2,67 @@
 
 namespace Modules\Attendance\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Modules\Attendance\Models\Attendance;
+use Modules\Teacher\Models\Teacher;
 
 class AttendanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct()
     {
-        return view('attendance::index');
+        $this->middleware(['auth', 'role:admin,coordinator']);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function adminIndex(Request $request)
     {
-        return view('attendance::create');
+        $date     = $request->get('date', today()->toDateString());
+        $teachers = Teacher::with(['attendances' => function ($q) use ($date) {
+            $q->where('date', $date);
+        }])
+        ->where('status', 'active')
+        ->orderBy('name')
+        ->get();
+
+        // Summary counts
+        $summary = [
+            'present'    => 0,
+            'absent'     => 0,
+            'late'       => 0,
+            'on_leave'   => 0,
+            'not_marked' => 0,
+        ];
+
+        foreach ($teachers as $teacher) {
+            $att = $teacher->attendances->first();
+            if (!$att) {
+                $summary['not_marked']++;
+            } else {
+                $summary[$att->status] = ($summary[$att->status] ?? 0) + 1;
+            }
+        }
+
+        return view('attendance::admin.index', compact('teachers', 'date', 'summary'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function markBulk(Request $request)
     {
-        return view('attendance::show');
+        $data = $request->validate([
+            'date'         => 'required|date',
+            'attendance'   => 'required|array',
+            'attendance.*' => 'required|in:present,absent,late,on_leave',
+        ]);
+
+        $date    = $data['date'];
+        $markedBy = auth()->id();
+
+        foreach ($data['attendance'] as $teacherId => $status) {
+            Attendance::updateOrCreate(
+                ['teacher_id' => (int) $teacherId, 'date' => $date],
+                ['status' => $status, 'marked_by' => $markedBy]
+            );
+        }
+
+        return redirect()->back()->with('success', 'Attendance marked successfully for ' . \Carbon\Carbon::parse($date)->format('d M Y') . '.');
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        return view('attendance::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
 }

@@ -2,55 +2,80 @@
 
 namespace Modules\Leave\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Modules\Leave\Models\Leave;
 
 class LeaveController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct()
     {
-        return view('leave::index');
+        $this->middleware(['auth', 'role:admin,coordinator']);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function adminIndex(Request $request)
     {
-        return view('leave::create');
+        $status = $request->get('status', 'pending');
+
+        $query = Leave::with(['teacher', 'approvedBy'])->orderByDesc('created_at');
+
+        if ($status !== 'all') {
+            $query->where('status', $status);
+        }
+
+        $leaves = $query->get();
+
+        $counts = [
+            'pending'  => Leave::where('status', 'pending')->count(),
+            'approved' => Leave::where('status', 'approved')->count(),
+            'rejected' => Leave::where('status', 'rejected')->count(),
+            'all'      => Leave::count(),
+        ];
+
+        return view('leave::admin.index', compact('leaves', 'status', 'counts'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function approve(Request $request, $id)
     {
-        return view('leave::show');
+        $leave = Leave::findOrFail($id);
+
+        if ($leave->status !== 'pending') {
+            return redirect()->back()->with('error', 'This leave request has already been processed.');
+        }
+
+        $data = $request->validate([
+            'admin_remarks' => 'nullable|string|max:500',
+        ]);
+
+        $leave->update([
+            'status'        => 'approved',
+            'approved_by'   => auth()->id(),
+            'approved_on'   => now(),
+            'admin_remarks' => $data['admin_remarks'] ?? null,
+        ]);
+
+        return redirect()->back()->with('success', "Leave request approved for {$leave->teacher->name}.");
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function reject(Request $request, $id)
     {
-        return view('leave::edit');
+        $leave = Leave::findOrFail($id);
+
+        if ($leave->status !== 'pending') {
+            return redirect()->back()->with('error', 'This leave request has already been processed.');
+        }
+
+        $data = $request->validate([
+            'admin_remarks' => 'nullable|string|max:500',
+        ]);
+
+        $leave->update([
+            'status'        => 'rejected',
+            'approved_by'   => auth()->id(),
+            'approved_on'   => now(),
+            'admin_remarks' => $data['admin_remarks'] ?? null,
+        ]);
+
+        return redirect()->back()->with('success', "Leave request rejected for {$leave->teacher->name}.");
     }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
 }
