@@ -1,0 +1,252 @@
+/* ============================================================
+   School Time Management System - Custom Styles
+   ============================================================ */
+
+:root {
+    --sidebar-width: 240px;
+    --navbar-height: 56px;
+    --primary: #1565C0;
+    --primary-dark: #0D47A1;
+}
+
+/* ---- Layout ---- */
+body {
+    background: #f4f6fb;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.wrapper {
+    padding-top: var(--navbar-height);
+    min-height: 100vh;
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+    width: var(--sidebar-width);
+    min-height: calc(100vh - var(--navbar-height));
+    position: sticky;
+    top: var(--navbar-height);
+    flex-shrink: 0;
+    overflow-y: auto;
+    transition: width 0.25s ease;
+}
+
+.sidebar .nav-link {
+    font-size: 14px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s;
+}
+
+.sidebar .nav-link:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+.sidebar .nav-link.active {
+    border-radius: 6px;
+}
+
+.sidebar .nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+/* ---- Main Content ---- */
+.main-content {
+    min-height: calc(100vh - var(--navbar-height));
+    overflow-x: hidden;
+}
+
+/* ---- Stat Cards ---- */
+.stat-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 12px;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---- Cards ---- */
+.card {
+    border-radius: 12px;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+}
+
+/* ---- Tables ---- */
+.table th {
+    font-size: 13px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.table td {
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+/* ---- Navbar ---- */
+.navbar {
+    height: var(--navbar-height);
+}
+
+.navbar .btn-link {
+    text-decoration: none;
+    padding: 4px 8px;
+}
+
+/* ---- Sidebar Toggle (Mobile) ---- */
+@media (max-width: 991.98px) {
+    .sidebar {
+        position: fixed;
+        left: -100%;
+        top: var(--navbar-height);
+        z-index: 1050;
+        height: calc(100vh - var(--navbar-height));
+        transition: left 0.25s ease;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: var(--navbar-height);
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+    }
+
+    .sidebar-overlay.show {
+        display: block;
+    }
+}
+
+/* ---- Badges ---- */
+.badge {
+    font-weight: 500;
+}
+
+/* ---- Forms ---- */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.15);
+}
+
+/* ---- Buttons ---- */
+.btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+/* ---- Timetable Grid ---- */
+.table.timetable-grid td {
+    min-width: 120px;
+    max-width: 150px;
+    font-size: 12px;
+}
+
+/* ---- Status colors ---- */
+.status-present  { color: #28a745; }
+.status-absent   { color: #dc3545; }
+.status-late     { color: #ffc107; }
+
+/* ---- Notification dot ---- */
+.notif-dot {
+    width: 8px;
+    height: 8px;
+    background: #dc3545;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* ---- Login page ---- */
+.login-card {
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ---- Print styles ---- */
+@media print {
+    .sidebar, .navbar, .btn, .alert, .no-print {
+        display: none !important;
+    }
+
+    .main-content {
+        width: 100% !important;
+        padding: 0 !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #dee2e6 !important;
+    }
+}
+
+/* ---- DataTables custom ---- */
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 13px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: white !important;
+    border-radius: 6px;
+}
+
+/* ---- Dark mode toggle ---- */
+[data-theme="dark"] {
+    --bs-body-bg: #1a1a2e;
+    --bs-body-color: #e0e0e0;
+}
+
+[data-theme="dark"] .card {
+    background: #16213e;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] .sidebar {
+    background: #0f0f23 !important;
+}
+
+[data-theme="dark"] .table {
+    color: #e0e0e0;
+}
