@@ -29,7 +29,7 @@
                         <td>{{ $i + 1 }}</td>
                         <td class="fw-semibold">{{ $subject->subject_name }}</td>
                         <td><code>{{ $subject->subject_code }}</code></td>
-                        <td>{{ $subject->schoolClass->class_name ?? '<span class="text-muted">All Classes</span>' }}</td>
+                        <td>{!! $subject->schoolClass ? $subject->schoolClass->class_name : '<span class="text-muted">All Classes</span>' !!}</td>
                         <td>
                             <div class="btn-group btn-group-sm">
                                 <button class="btn btn-outline-primary"
