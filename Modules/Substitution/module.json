@@ -1,0 +1,11 @@
+{
+    "name": "Substitution",
+    "alias": "substitution",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Substitution\\Providers\\SubstitutionServiceProvider"
+    ],
+    "files": []
+}

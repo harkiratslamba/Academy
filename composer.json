@@ -1,0 +1,122 @@
+{
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The skeleton application for the Laravel framework.",
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": "^8.3",
+        "laravel/framework": "^13.7",
+        "laravel/tinker": "^3.0",
+        "nwidart/laravel-modules": "^13.0"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.23",
+        "laravel/pail": "^1.2.5",
+        "laravel/pao": "^1.0.6",
+        "laravel/pint": "^1.27",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.6",
+        "phpunit/phpunit": "^12.5.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/",
+            "Modules\\": "Modules/",
+            "Modules\\Auth\\": "Modules/Auth/app/",
+            "Modules\\Auth\\Database\\Factories\\": "Modules/Auth/database/factories/",
+            "Modules\\Auth\\Database\\Seeders\\": "Modules/Auth/database/seeders/",
+            "Modules\\Dashboard\\": "Modules/Dashboard/app/",
+            "Modules\\Dashboard\\Database\\Factories\\": "Modules/Dashboard/database/factories/",
+            "Modules\\Dashboard\\Database\\Seeders\\": "Modules/Dashboard/database/seeders/",
+            "Modules\\Teacher\\": "Modules/Teacher/app/",
+            "Modules\\Teacher\\Database\\Factories\\": "Modules/Teacher/database/factories/",
+            "Modules\\Teacher\\Database\\Seeders\\": "Modules/Teacher/database/seeders/",
+            "Modules\\Classes\\": "Modules/Classes/app/",
+            "Modules\\Classes\\Database\\Factories\\": "Modules/Classes/database/factories/",
+            "Modules\\Classes\\Database\\Seeders\\": "Modules/Classes/database/seeders/",
+            "Modules\\Subject\\": "Modules/Subject/app/",
+            "Modules\\Subject\\Database\\Factories\\": "Modules/Subject/database/factories/",
+            "Modules\\Subject\\Database\\Seeders\\": "Modules/Subject/database/seeders/",
+            "Modules\\Timetable\\": "Modules/Timetable/app/",
+            "Modules\\Timetable\\Database\\Factories\\": "Modules/Timetable/database/factories/",
+            "Modules\\Timetable\\Database\\Seeders\\": "Modules/Timetable/database/seeders/",
+            "Modules\\Substitution\\": "Modules/Substitution/app/",
+            "Modules\\Substitution\\Database\\Factories\\": "Modules/Substitution/database/factories/",
+            "Modules\\Substitution\\Database\\Seeders\\": "Modules/Substitution/database/seeders/",
+            "Modules\\Attendance\\": "Modules/Attendance/app/",
+            "Modules\\Attendance\\Database\\Factories\\": "Modules/Attendance/database/factories/",
+            "Modules\\Attendance\\Database\\Seeders\\": "Modules/Attendance/database/seeders/",
+            "Modules\\Leave\\": "Modules/Leave/app/",
+            "Modules\\Leave\\Database\\Factories\\": "Modules/Leave/database/factories/",
+            "Modules\\Leave\\Database\\Seeders\\": "Modules/Leave/database/seeders/",
+            "Modules\\Report\\": "Modules/Report/app/",
+            "Modules\\Report\\Database\\Factories\\": "Modules/Report/database/factories/",
+            "Modules\\Report\\Database\\Seeders\\": "Modules/Report/database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "setup": [
+            "composer install",
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan key:generate",
+            "@php artisan migrate --force",
+            "npm install --ignore-scripts",
+            "npm run build"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1 --timeout=0\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
+        ],
+        "test": [
+            "@php artisan config:clear --ansi @no_additional_args",
+            "@php artisan test"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
+        ],
+        "pre-package-uninstall": [
+            "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
+            "wikimedia/composer-merge-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

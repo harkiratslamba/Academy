@@ -1,0 +1,12 @@
+{
+    "Auth": true,
+    "Dashboard": true,
+    "Teacher": true,
+    "Classes": true,
+    "Subject": true,
+    "Timetable": true,
+    "Substitution": true,
+    "Attendance": true,
+    "Leave": true,
+    "Report": true
+}
